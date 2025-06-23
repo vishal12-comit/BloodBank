@@ -1,0 +1,36 @@
+{% include 'head.html'%}
+<div class="container mt-4">
+    <div class="text-center h6 ">Blood Stock <b>{{bloodGroup}}</b> Required {{units_required}}</div>
+    <div class="row">
+        {% for blood_stock in blood_stocks%}
+        {% if int(blood_stock['number_of_units'])> int(blood_stock['assigned_units'])%}
+         {%set donor = get_donor_by_id2(blood_stock['donationId'])%}
+        <div class="col-md-3 mt-3">
+            <div class="card p-4 mt-1" style="box-shadow:0px 0px 7px red">
+                 <div class="text-secondary" style="font-size:12px">Blood Group</div>
+               <div class="h6" style="font-size:14px">{{blood_stock['bloodGroup']}}</div>
+                <div class="text-secondary" style="font-size:12px">Blood UnitNumber</div>
+               <div class="h6" style="font-size:14px">{{blood_stock['bloodUnitNumber']}}</div>
+                <div class="text-secondary" style="font-size:12px">Donor</div>
+                <div class="h6" style="font-size:14px"><a href="view_donor?donorId={{donor['_id']}}">{{donor['first_name']}} {{donor['last_name']}}</a> </div>
+                <div class="text-secondary" style="font-size:12px">Available Units</div>
+               <div class="h6" style="font-size:14px">{{int(blood_stock['number_of_units'])-int(blood_stock['assigned_units'])}}</div>
+                <form action="assignBloodAction" method="post">
+                    <input type="hidden" name="bloodStockId" value="{{blood_stock['_id']}}">
+                    <input type="hidden" name="healthCareRequestId" value="{{healthCareRequestId}}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="number" name="number_of_units" min="1" max="{{units_required}}" class="form-control" placeholder="units">
+                        </div>
+                        <div class="col-md-6">
+                            <input type="submit" value="Assign" class="btn btn-success w-100">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor%}
+    </div>
+</div>

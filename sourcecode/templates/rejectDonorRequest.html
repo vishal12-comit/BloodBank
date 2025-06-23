@@ -1,0 +1,21 @@
+{% include 'head.html'%}
+<div class="row mt-5">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div class="card p-3">
+            <div class="text-center h4 mt-3">Reject Donation Request</div>
+            <form action="rejectDonorRequestAction" method="post">
+                <input type="hidden" name="donationId" value="{{donationId}}">
+                <input type="hidden" name="appointment_date" value="{{appointment_date}}">
+                <div>
+                    <label>Reason For Rejection</label>
+                    <textarea name="reason" class="form-control" placeholder="Reason for Rejection" required></textarea>
+                </div>
+                <div class="mt-3">
+                    <input type="submit" value="Reject Request" class="btn btn-danger w-100">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+</div>

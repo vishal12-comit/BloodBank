@@ -1,0 +1,83 @@
+{% include 'head.html'%}
+<div class="container-fluid mt-4">
+    {% if session['role'] == 'admin' %}
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4"></div>
+            <div class="col-md-3">
+                <form action="donationRequests">
+                    <input type="date" name="appointment_date" value="{{appointment_date}}" onchange="this.form.submit()" class="form-control">
+                </form>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    {% endif %}
+    <div class="row">
+        {% if len(donations) >0 %}
+        {% for donation in donations%}
+        {% set donor = get_donor_by_id(donation['donorId'])%}
+        {% set slot = get_slot_by_slot_id(donation['slot_id'])%}
+        <div class="col-md-3">
+            <div class="card p-3">
+                <div class="text-muted" style="font-size:12px">Date : </div>
+                <div class="h3 mt-2" style="font-size:15px;font-weight:12px"> {{donation['appointment_date'].strftime("%d-%m-%Y")}} </div>
+                {% if 'bloodGroup' in donation %}
+                    <div class="text-muted" style="font-size:12px">Blood Group : </div>
+                    <div class="h3 mt-2" style="font-size:15px;font-weight:12px">
+                            {{donation['bloodGroup']}}
+                    </div>
+                {% endif %}
+                <div class="text-muted" style="font-size:12px">Slot Number : </div>
+                <div class="h3 mt-2" style="font-size:15px;font-weight:12px"> {{slot['slot_number']}} </div>
+                <div class="text-muted" style="font-size:12px">Timings : </div>
+                <div class="h3 mt-2" style="font-size:15px;font-weight:12px"> {{slot['slot_start_time'].strftime("%I:%M %p")}} - {{slot['slot_end_time'].strftime("%I:%M %p")}} </div>
+                <div class="text-muted" style="font-size:12px">Requested By : </div>
+                <div class="h3 mt-2" style="font-size:15px;font-weight:12px"> <a href="view_donor?donorId={{donor['_id']}}">{{donor['first_name']}} {{donor['last_name']}}</a> </div>
+                <div class="text-muted" style="font-size:12px">Status : </div>
+                <div class="h3 mt-2" style="font-size:15px;font-weight:12px"> {{donation['status']}} </div>
+                {% if 'reason' in donation %}
+                    <div class="text-muted" style="font-size:12px">Reason for Rejection : </div>
+                    <div class="h3 mt-2" style="font-size:15px;font-weight:12px"> {{donation['reason']}} </div>
+                {% endif %}
+               {% if session['role'] =='admin'%}
+                 {% if donation['status'] =='Requested'%}
+                <div class="card-footer">
+                    <div class="row">
+                            <div class="col-md-6">
+                                <form action="acceptDonorRequest" method="post">
+                                    <input type="hidden" name="donationId" value="{{donation['_id']}}">
+                                    <input type="hidden" name="appointment_date" value="{{appointment_date}}">
+                                    <input type="submit" value="Accept" class="btn btn-success w-100">
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <form action="rejectDonorRequest" method="post">
+                                     <input type="hidden" name="donationId" value="{{donation['_id']}}">
+                                     <input type="hidden" name="appointment_date" value="{{appointment_date}}">
+                                    <input type="submit" value="Reject" class="btn btn-danger w-100">
+                                </form>
+                            </div>
+                    </div>
+                </div>
+                {% endif%}
+                {% if donation['status']=='Request Accepted'%}
+                {% if date2 > slot['slot_start_time'] and date2 < slot['slot_end_time'] %}
+                    <form action="collectBlood" method="post">
+                         <input type="hidden" name="donationId" value="{{donation['_id']}}">
+                            <div class=" mt-4">
+                                <input type="submit" value="Collect" class="btn btn-primary w-100">
+                            </div>
+                       </form>
+                {% else%}
+                    <div class="mt-3 text-center">Actions are available on slot time</div>
+                {% endif %}
+                {% endif%}
+                {% endif%}
+            </div>
+        </div>
+        {% endfor%}
+        {% else %}
+            <div class="text-center h3 mt-5">No Requests Available</div>
+        {% endif %}
+    </div>
+</div>

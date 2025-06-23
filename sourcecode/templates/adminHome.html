@@ -1,0 +1,130 @@
+{% include 'head.html'%}
+<div class="container mt-5">
+    <div class="text-center h6 ">Timings</div>
+    <div class="card p-3" style="background-color:#ccc">
+        <div class="row">
+            <div class="col-md-3">
+                <div>Start Time</div>
+                <div>
+                    {% if timing!=None %}
+                        {{timing['start_time'].strftime("%I:%M %p")}}
+                    {% else %}
+                        Update Timings
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div>End Time</div>
+                <div>
+                    {% if timing!=None %}
+                        {{timing['end_time'].strftime("%I:%M %p")}}
+                    {% else %}
+                        Update Timings
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-3 mt-3">
+                <div>
+                    {% if timing!=None %}
+                        <a href="slots" class="btn btn-danger w-100">Slots</a>
+                    {% else %}
+                        Update Timings
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-3 mt-3">
+                <a href="update_timings" class="btn btn-danger w-100">Update Timings</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    {% set o_negative = get_o_negative_count()%}
+    {% set o_positive = get_o_positive_count()%}
+    {% set a_positive = get_a_positive_count()%}
+    {% set a_negative = get_a_negative_count()%}
+    {% set b_positive = get_b_positive_count()%}
+    {% set b_negative = get_b_negative_count()%}
+    {% set AB_positive = get_AB_positive_count()%}
+    {% set AB_negative = get_AB_negative_count()%}
+    <div class="text-center h6 ">Blood Stocks</div>
+    <a href="addBloodStock" class="btn btn-danger mb-2">Add Stock</a>
+    <div class="card p-3" style="background-color:#ccc">
+        <div class="row">
+            <div class="col-md-3">
+                    <div class="text-muted" style="font-size:12px">O Negative</div>
+                    <div class="h6 mt-1"> {% if o_negative==0%} Not Available {% else%} {{o_negative}} Stock {% endif%}
+                    </div>
+            </div>
+            <div class="col-md-3">
+                    <div class="text-muted" style="font-size:12px">O Positive</div>
+                    <div class="h6 mt-1"> {% if o_positive==0%} Not Available {% else%} {{o_positive}} Stock {% endif%}
+                    </div>
+            </div>
+            <div class="col-md-3">
+                    <div class="text-muted" style="font-size:12px">A Positive</div>
+                    <div class="h6 mt-1"> {% if a_positive==0%} Not Available {% else%} {{a_positive}} Stocks {% endif%}
+                    </div>
+            </div>
+            <div class="col-md-3">
+                    <div class="text-muted" style="font-size:12px">A Negative</div>
+                    <div class="h6 mt-1"> {% if a_negative==0%} Not Available {% else%} {{a_negative}} Stocks {% endif%}
+                    </div>
+            </div>
+            <div class="col-md-3">
+                    <div class="text-muted" style="font-size:12px">AB Positive</div>
+                    <div class="h6 mt-1"> {% if AB_positive==0%} Not Available {% else%} {{AB_positive}} Stocks {%
+                        endif%}</div>
+            </div>
+            <div class="col-md-3">
+                    <div class="text-muted" style="font-size:12px">AB Negative</div>
+                    <div class="h6 mt-1"> {% if AB_negative==0%} Not Available {% else%} {{AB_negative}} Stocks {%
+                        endif%}</div>
+            </div>
+            <div class="col-md-3">
+                    <div class="text-muted" style="font-size:12px">B Positive</div>
+                    <div class="h6 mt-1"> {% if b_positive==0%} Not Available {% else%} {{b_positive}} Stocks {% endif%}
+                    </div>
+            </div>
+            <div class="col-md-3">
+                    <div class="text-muted" style="font-size:12px">B Negative</div>
+                    <div class="h6 mt-1"> {% if b_negative==0%} Not Available {% else%} {{b_negative}} Stocks {% endif%}
+                    </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        {% for detail in bloodStocks%}
+        {% if 'donationId' in detail%}
+        {%set donor = get_donor_by_id2(detail['donationId'])%}
+        {%endif%}
+        <div class="col-md-3 mt-3">
+            <div class="card p-4 mt-1">
+                <div class="text-secondary" style="font-size:12px">Blood UnitNumber</div>
+                <div class="h6" style="font-size:14px">{{detail['bloodUnitNumber']}}</div>
+                <div class="text-secondary" style="font-size:12px">Blood Stock Id</div>
+                <div class="h6" style="font-size:14px">{{detail['_id']}}</div>
+                <div class="text-secondary" style="font-size:12px">Blood Group</div>
+                <div class="h6" style="font-size:14px">{{detail['bloodGroup']}}</div>
+                <div class="text-secondary" style="font-size:12px">Number of Units</div>
+                <div class="h6" style="font-size:14px">{{detail['number_of_units']}}</div>
+                  <div class="text-secondary" style="font-size:12px">Assigned Units</div>
+                <div class="h6" style="font-size:14px">{{detail['assigned_units']}}</div>
+                <div class="text-secondary" style="font-size:12px">Stock Available Units</div>
+                <div class="h6" style="font-size:14px">{{int(detail['number_of_units'])- int(detail['assigned_units'])}}</div>
+                <div class="text-secondary" style="font-size:12px">Status</div>
+                <div class="h6" style="font-size:14px">{{detail['status']}}</div>
+                {% if 'donationId' in detail%}
+                <div class="text-secondary" style="font-size:12px">Donor Id</div>
+                <div class="h6" style="font-size:14px">{{donor['_id']}} (Donor)</div>
+                <div class="text-secondary" style="font-size:12px">Donated By</div>
+                <div class="h6" style="font-size:14px"> <a href="view_donor?donorId={{donor['_id']}}">{{donor['first_name']}} {{donor['last_name']}}</a> </div>
+              {% endif%}
+            </div>
+        </div>
+        {% endfor%}
+    </div>
+</div>

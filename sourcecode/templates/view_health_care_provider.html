@@ -1,0 +1,42 @@
+{% include 'head.html'%}
+<div class="row mt-5">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div class="card p-3">
+            <div class="text-center h4 mt-3">Health Care Provider Details</div>
+            <div>
+                <div class="text-muted">Health Care Provider Id</div>
+                <div>{{health_care_provider['_id']}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="text-muted">Name</div>
+                <div>{{health_care_provider['first_name']}} {{health_care_provider['last_name']}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="text-muted">Email</div>
+                <div>{{health_care_provider['email']}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="text-muted">Phone</div>
+                <div>{{health_care_provider['phone']}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="text-muted">City</div>
+                <div>{{health_care_provider['city']}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="text-muted">State</div>
+                <div>{{health_care_provider['state']}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="text-muted">Zipcode</div>
+                <div>{{health_care_provider['zipCode']}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="text-muted">Address</div>
+                <div>{{health_care_provider['address']}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+</div>

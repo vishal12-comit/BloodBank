@@ -1,0 +1,27 @@
+{% include 'head.html'%}
+<div class="container-fluid mt-4">
+    <div class="row">
+        {% for donation in donations%}
+        {% set donor = get_donor_by_id(donation['donorId'])%}
+        <div class="col-md-3">
+            <div class="card p-3">
+                <div class="text-muted" style="font-size:12px">Donated By : </div>
+                <div class="h3 mt-2" style="font-size:15px;font-weight:12px"> <a href="view_donor?donorId={{donor['_id']}}">{{donor['first_name']}} {{donor['last_name']}}</a>  </div>
+                <div class="text-muted" style="font-size:12px">Date : </div>
+                <div class="h3 mt-2" style="font-size:15px;font-weight:12px"> {{donation['appointment_date'].strftime("%d-%m-%Y")}} </div>
+                <div class="text-muted" style="font-size:12px">Blood Group : </div>
+                <div class="h3 mt-2" style="font-size:15px;font-weight:12px"> {{donation['bloodGroup']}} </div>
+                {% if 'bloodUnitNumber' in donation%}
+                <div class="text-muted" style="font-size:12px">Blood UnitNumber : </div>
+                <div class="h3 mt-2" style="font-size:15px;font-weight:12px"> {{donation['bloodUnitNumber']}} </div>
+                <div class="text-muted" style="font-size:12px">Number of units : </div>
+                <div class="h3 mt-2" style="font-size:15px;font-weight:12px"> {{donation['number_of_units']}} </div>
+                {% endif%}
+                <div class="text-muted" style="font-size:12px">Status : </div>
+                <div class="h3 mt-2" style="font-size:15px;font-weight:12px"> {{donation['status']}} </div>
+
+            </div>
+        </div>
+        {% endfor%}
+    </div>
+</div>

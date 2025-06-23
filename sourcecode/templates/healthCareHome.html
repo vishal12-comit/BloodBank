@@ -1,0 +1,20 @@
+{% include 'head.html'%}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="card p-4">
+                <div class="text-center h5" style="font-size:13px">My Profile</div>
+                <div class="text-center h5" >{{healthCare['name']}}</div>
+                <div class="mt-2">Email : <b>{{healthCare['email']}}</b></div>
+                <div class="mt-2">Phone : <b>{{healthCare['phone']}}</b></div>
+                <div class="mt-2">City : <b>{{healthCare['city']}}</b></div>
+                <div class="mt-2">ZipCode : <b>{{healthCare['zipCode']}}</b></div>
+                <div class="mt-2">Address : <b>{{healthCare['address']}}</b></div>
+                <div class="card-footer mt-1">
+                    <a href="sendBloodRequest?healthCareId={{healthCare['_id']}}" class="btn btn-dark w-100 " style="font-size:15px">Send Blood Request</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

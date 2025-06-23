@@ -1,0 +1,86 @@
+{% include 'head.html'%}
+<div class="container-fluid">
+    <div class="container mt-3">
+        <div class="row">
+       {% if timing %}
+    <div class="col-md-4">
+        <div>Start Time</div>
+        <div>{{ timing['start_time'].strftime('%I:%M %p') }}</div>
+    </div>
+    <div class="col-md-4">
+        <div>End Time</div>
+        <div>{{ timing['end_time'].strftime('%I:%M %p') }}</div>
+    </div>
+{% else %}
+    <div class="col-md-4">
+        <div>Start Time</div>
+        <div><span class="text-danger">Not Set</span></div>
+    </div>
+    <div class="col-md-4">
+        <div>End Time</div>
+        <div><span class="text-danger">Not Set</span></div>
+    </div>
+{% endif %}
+
+            <div class="col-md-4">
+                <form action="slots">
+                    <label>Appointment Date</label>
+                    {% if session['role'] == 'admin' %}
+                        <input type="date" name="appointment_date" value="{{appointment_date}}" class="form-control" onchange="this.form.submit()">
+                    {% else %}
+                        <input type="date" name="appointment_date" value="{{appointment_date}}" class="form-control" min="{{appointment_date}}" onchange="this.form.submit()">
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        {% for slot in slots %}
+        {% set is_booked = is_slot_booked(slot['_id'], appointment_date) %}
+            <div class="col-md-2 mt-3">
+                <div class="card p-3" style="background-color:#ccc">
+                    <div class="text-center h1">{{slot['slot_number']}}</div>
+                    <div class="text-center">{{slot['slot_start_time'].strftime('%I:%M %p')}} - {{slot['slot_end_time'].strftime('%I:%M %p')}} </div>
+                    <div>
+                        {% if is_booked %}
+                            {% if session['role'] == 'admin' %}
+                                <div class="text-center mt-3">
+                                    <a href="donationRequests?slot_id={{slot['_id']}}&appointment_date={{appointment_date}}" class="btn btn-danger">Reserved</a>
+                                </div>
+                            {% else %}
+                                <div class="text-center mt-4 pt-1">
+                                    Not Available
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            {% if session['role'] == 'donor' %}
+                                {% set appointment_date_time = get_appointment_date_time(appointment_date, slot['slot_start_time']) %}
+                                {% if appointment_date_time > datetime.datetime.now() %}
+                                {% set can_book = can_book_slot_on_this_date(appointment_date) %}
+                                {% if can_book %}
+                                <div class="text-center mt-3">
+                                    <a href="sendRequest1?slot_id={{slot['_id']}}&appointment_date={{appointment_date}}" class="btn btn-danger">Select</a>
+                                </div>
+                                {% else %}
+                                    <div class="text-center mt-4 pt-1">
+                                        Limit Exceed
+                                    </div>
+                                {% endif %}
+                                {% else  %}
+                                    <div class="text-center mt-4 pt-1">
+                                        Expired
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div class="text-center mt-4 pt-1">
+                                    Not Reserved
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

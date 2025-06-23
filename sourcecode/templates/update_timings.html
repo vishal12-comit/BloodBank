@@ -1,0 +1,44 @@
+{% include 'head.html'%}
+<div class="container mt-5">
+    <form action="update_timings_action">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="card p-3" style="background-color:#ccc">
+                    <div class="text-center h6 ">
+                        {% if timing!=None %}
+                            Update Timings
+                        {% else %}
+                            Add Timings
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label>Start Time</label>
+                        {% if timing!=None %}
+                            <input type="time" name="start_time" value="{{timing['start_time'].strftime('%H:%M')}}"  class="form-control mt-1" required>
+                        {% else %}
+                            <input type="time" name="start_time" class="form-control mt-1" required>
+                        {% endif %}
+
+                    </div>
+                    <div class="form-group">
+                        <label>End Time</label>
+                        {% if timing!=None %}
+                            <input type="time" name="end_time" value="{{timing['end_time'].strftime('%H:%M')}}" class="form-control mt-1" required>
+                        {% else %}
+                            <input type="time" name="end_time" class="form-control mt-1" required>
+                        {% endif %}
+                    </div>
+                    <div class="form-group mt-2">
+                        {% if timing!=None %}
+                            <input type="submit" class="btn btn-danger w-100" value="Update Timings" >
+                        {% else %}
+                            <input type="submit" class="btn btn-danger w-100" value="Add Timings" >
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </form>
+</div>

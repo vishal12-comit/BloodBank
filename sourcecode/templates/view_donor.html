@@ -1,0 +1,46 @@
+{% include 'head.html'%}
+<div class="row mt-5">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div class="card p-3">
+            <div class="text-center h4 mt-3">Donor Details</div>
+            <div>
+                <div class="text-muted">Donor Id</div>
+                <div>{{donor['_id']}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="text-muted">Name</div>
+                <div>{{donor['first_name']}} {{donor['last_name']}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="text-muted">Email</div>
+                <div>{{donor['email']}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="text-muted">Phone</div>
+                <div>{{donor['phone']}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="text-muted">Date of Birth</div>
+                <div>{{donor['dob']}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="text-muted">City</div>
+                <div>{{donor['city']}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="text-muted">State</div>
+                <div>{{donor['state']}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="text-muted">Zipcode</div>
+                <div>{{donor['zipcode']}}</div>
+            </div>
+            <div class="mt-3">
+                <div class="text-muted">Address</div>
+                <div>{{donor['address']}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+</div>

@@ -1,0 +1,66 @@
+{% include 'head.html'%}
+<div class="container-fluid mt-4">
+    <div class="row">
+        {% for healthCareRequest in healthCareRequests%}
+        {% if healthCareRequest['status'] =='Request Accepted' %}
+        {% set isBloodAssigned = get_is_BloodAssigned_by_id(healthCareRequest['_id'],healthCareRequest['numberOfUnits'],healthCareRequest['assigned'])%}
+        {% endif%}
+        {% set healthCare = get_healthCare_by_id(healthCareRequest['healthCareId'])%}
+        <div class="col-md-3">
+            <div class="card p-3">
+                <div class="text-muted" style="font-size:12px">Request Id : </div>
+                <div class="h3 mt-1" style="font-size:15px;font-weight:12px"> {{healthCareRequest['_id']}} </div>
+                <div class="text-muted" style="font-size:12px">Requested By : </div>
+                <div class="h3 mt-1" style="font-size:15px;font-weight:12px"><a href="view_health_care_provider?health_care_provider_id={{healthCare['_id']}}">{{healthCare['first_name']}} {{healthCare['last_name']}} </a> </div>
+                <div class="text-muted" style="font-size:12px">Date : </div>
+                <div class="h3 mt-1" style="font-size:15px;font-weight:12px"> {{healthCareRequest['date'].strftime("%d-%m-%Y %I:%M %p")}} </div>
+                <div class="text-muted" style="font-size:12px">Required BloodGroup : </div>
+                <div class="h3 mt-1" style="font-size:15px;font-weight:12px"> {{healthCareRequest['bloodGroup']}} </div>
+                <div class="text-muted" style="font-size:12px">Number Of Units Req : </div>
+                <div class="h3 mt-1" style="font-size:15px;font-weight:12px"> {{healthCareRequest['numberOfUnits']}} </div>
+
+                {% if 'reason' in healthCareRequest %}
+                    <div class="text-muted" style="font-size:12px">Reason : </div>
+                    <div class="h3 mt-1" style="font-size:15px;font-weight:12px"> {{healthCareRequest['reason']}} </div>
+                {% else %}
+                    <div class="text-muted" style="font-size:12px">Number Of Units Assigned : </div>
+                    <div class="h3 mt-1" style="font-size:15px;font-weight:12px"> {{healthCareRequest['assigned']}} </div>
+                {% endif %}
+                <div class="text-muted" style="font-size:12px">Status : </div>
+                <div class="h3 mt-1" style="font-size:15px;font-weight:12px"> {{healthCareRequest['status']}} </div>
+
+               {% if session['role'] =='admin'%}
+                 {% if healthCareRequest['status'] =='Requested'%}
+                <div class="card-footer">
+                    <div class="row">
+                            <div class="col-md-6">
+                                <form action="acceptBloodRequest" method="post">
+                                    <input type="hidden" name="healthCareRequestId" value="{{healthCareRequest['_id']}}">
+                                    <input type="submit" value="Accept" class="btn btn-success w-100">
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <form action="rejectBloodRequest" method="post">
+                                     <input type="hidden" name="healthCareRequestId" value="{{healthCareRequest['_id']}}">
+                                    <input type="submit" value="Reject" class="btn btn-danger w-100">
+                                </form>
+                            </div>
+                    </div>
+                </div>
+                {% endif%}
+                {% if healthCareRequest['status'] =='Request Accepted'%}
+                {% if int(healthCareRequest['numberOfUnits'])> int(healthCareRequest['assigned'])%}
+                 <form action="assignBlood" method="post">
+                     <input type="hidden" name="healthCareRequestId" value="{{healthCareRequest['_id']}}">
+                     <input type="hidden" name="bloodGroup" value="{{healthCareRequest['bloodGroup']}}">
+                         <input type="hidden" name="units_required" value="{{int(healthCareRequest['numberOfUnits'])-int(healthCareRequest['assigned'])}}">
+                        <input type="submit" value="Assign" class="btn btn-primary w-100 mt-1">
+                 </form>
+                {% endif%}
+                {% endif%}
+                {% endif%}
+            </div>
+        </div>
+        {% endfor%}
+    </div>
+</div>
